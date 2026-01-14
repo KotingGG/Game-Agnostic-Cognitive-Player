@@ -1,0 +1,21 @@
+---
+config:
+  flowchart:
+    curve: linear
+---
+graph TD;
+	__start__(<p>__start__</p>)
+	perception(perception)
+	world_model(world_model)
+	decision(decision)
+	action(action)
+	memory(memory)
+	__end__(<p>__end__</p>)
+	__start__ --> perception;
+	action -.-> __end__;
+	decision --> action;
+	perception --> world_model;
+	world_model --> decision;
+	classDef default fill:#f2f0ff,line-height:1.2
+	classDef first fill-opacity:0
+	classDef last fill:#bfb6fc
