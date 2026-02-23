@@ -1,4 +1,4 @@
-# Game-Agnostic Cognitive Player
+# Game-Agnostic Cognitive Player (GACP)
 
 > [!WARNING]
 >  The project is frozen until possibly the summer of 2026 because of studies. Sorry
