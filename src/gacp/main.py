@@ -1,8 +1,8 @@
-from agent.graph import build_workflow
+from agent.graph import Graph
 from environments.timing import wait_for_next_game_tick
 
 def main():
-    agent_app = build_workflow()
+    agent_app = Graph.build_workflow()
     time = 0
 
     while True:

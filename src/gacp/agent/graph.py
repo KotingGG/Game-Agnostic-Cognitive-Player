@@ -9,60 +9,62 @@ from modules.memory.module import MemoryModule
 from modules.introspection.module import IntrospectionModule
 from .state import AgentState
 
-perception_instance = PerceptionModule()
-world_model_instance = WorldModelModule()
-decision_instance = DecisionModule()
-action_instance = ActionModule()
-memory_instance = MemoryModule()
 
-def perception_node(state) -> AgentState: 
-    return perception_instance.update_state(state)
+class Graph:
 
-def world_model_node(state) -> AgentState: 
-    return world_model_instance.update_state(state)
+    def build_workflow(self) -> CompiledStateGraph:
+        workflow = StateGraph(AgentState)
 
-def decision_node(state) -> AgentState: 
-    return decision_instance.update_state(state)
+        workflow.add_node("perception", self._perception_node)
+        workflow.add_node("world_model", self._world_model_node)
+        workflow.add_node("decision", self._decision_node)
+        workflow.add_node("action", self._action_node)
+        workflow.add_node("memory", self._memory_node) 
 
-def action_node(state) -> AgentState: 
-    return action_instance.update_state(state)
+        workflow.set_entry_point("perception")
 
-def memory_node(state) -> AgentState: 
-    return memory_instance.update_state(state)
+        workflow.add_edge(START, "perception")
+        workflow.add_edge("perception", "world_model")
+        workflow.add_edge("world_model", "decision")
+        workflow.add_edge("decision", "action")
+        workflow.add_edge("action", END)
 
-def build_workflow() -> CompiledStateGraph:
-    workflow = StateGraph(AgentState)
+        def should_reflect(state: AgentState):
+            # TODO: Implement this stub. Stub: Always return END, never reflect
+            return END
 
-    workflow.add_node("perception", perception_node)
-    workflow.add_node("world_model", world_model_node)
-    workflow.add_node("decision", decision_node)
-    workflow.add_node("action", action_node)
-    workflow.add_node("memory", memory_node) 
+        workflow.add_conditional_edges(
+            "action",
+            should_reflect,
+            {END: END} # TODO: Implement this stub. Stub. Change along with should_reflect
+        )
 
-    workflow.set_entry_point("perception")
+        graph = workflow.compile()
 
-    workflow.add_edge(START, "perception")
-    workflow.add_edge("perception", "world_model")
-    workflow.add_edge("world_model", "decision")
-    workflow.add_edge("decision", "action")
-    workflow.add_edge("action", END)
+        # Visualization. 
+        # TODO: use langsmith
+        mermaid_code = graph.get_graph().draw_mermaid()
+        with open("architecture_graph.mmd", "w", encoding="utf-8") as f:
+            f.write(mermaid_code)
 
-    def should_reflect(state: AgentState):
-        # TODO: Implement this stub. Stub: Always return END, never reflect
-        return END
+        return graph
 
-    workflow.add_conditional_edges(
-        "action",
-        should_reflect,
-        {END: END} # TODO: Implement this stub. Stub. Change along with should_reflect
-    )
+    def _perception_node(self, state) -> AgentState: 
+        perception_instance = PerceptionModule()
+        return perception_instance.update_state(state)
 
-    graph = workflow.compile()
+    def _world_model_node(self, state) -> AgentState: 
+        world_model_instance = WorldModelModule()
+        return world_model_instance.update_state(state)
 
-    # Visualization. 
-    # TODO: use langsmith
-    mermaid_code = graph.get_graph().draw_mermaid()
-    with open("architecture_graph.mmd", "w", encoding="utf-8") as f:
-        f.write(mermaid_code)
+    def _decision_node(self, state) -> AgentState: 
+        decision_instance = DecisionModule()
+        return decision_instance.update_state(state)
 
-    return graph
+    def _action_node(self, state) -> AgentState: 
+        action_instance = ActionModule()
+        return action_instance.update_state(state)
+
+    def _memory_node(self, state) -> AgentState: 
+        memory_instance = MemoryModule()
+        return memory_instance.update_state(state)
