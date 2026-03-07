@@ -69,7 +69,7 @@
 **Clone and set up the project:**
 ```bash
 git clone https://github.com/KotingGG/GameAgnosticCognitivePlayer.git
-cd GameAgnosticCognitivePlayer
+cd Game-Agnostic-Cognitive-Player
 ```
 
 **Install dependencies:**
@@ -108,7 +108,7 @@ TODO: ...
 
 ### Project Structure
 ```
-GameAgmosticCognitivePlayer/
+Game-Agnostic-Cognitive-Player/
 ├── src/
 │   ├── gacp/
 │   │   ├── agent/                   # Agent Orchestration. Contains the LangGraph workflow definition (graph.py) and the central state schema (state.py) that wires the modules together.
