@@ -1,8 +1,5 @@
 # Game-Agnostic Cognitive Player (GACP)
 
-> [!WARNING]
->  The project is frozen until possibly the summer of 2026 because of studies. Sorry
-
 ![Python Version](https://img.shields.io/badge/python-3.13%252B-blue.svg) ![uv](https://img.shields.io/badge/uv-ready-5A45FF.svg) ![License](https://img.shields.io/badge/license-MIT-yellow.svg) ![Learning Focus](https://img.shields.io/badge/Focus-Architectural_Learning-blue)
 
 ## 🧠 About This Project
@@ -175,119 +172,6 @@ graph TB
 
     linkStyle 6 stroke:gray,stroke-width:1px,stroke-dasharray: 5 5
 ```
-
-
-### Running Tests
-TODO: ...
-
-## 🗺️ Roadmap 2026-2027
-
-## Year-Long Development Plan
-
-### STAGE 0 (Months 0-2): Foundation Architecture
-**Technical Goals:**
-- Create architecture with stub test modules [2]
-- Replace stub modules with full implementations [3]:
-  - Perception Module (entry point) with two parts:
-    1. General data capture layer
-    2. Configurable interpreter (adapter)
-  - Memory System (what it remembers)
-  - World Model (how it explains the world)
-  - Decision Module (why it acts)
-  - Action Module (action execution)
-  - Introspection Module (introspection)
-
-**Implement unified data format [4]:**
-- observation (Observation)
-- action (Action)
-- outcome (Outcome)
-
-**Create a system where connecting a new game means writing configs for the interpreter and action mapping, NOT changing core code.**
-
-**Crucial:** No game logic inside the cognitive core.
-
-**Expected Outcome:**
-Agent performs any action not randomly, but with textual explanation: "I'm doing X because I expect Y."
-
-### STAGE 1 (Months 2-3.5): Learning Through Consequences (Cause → Effect)
-**Technical Goals:**
-- Implement short-term memory (last N steps)
-- Implement action → outcome linking
-- Introduce simple metric: "expectation confirmed / not confirmed"
-
-**Expected Outcome:**
-Agent changes behavior when its expectations are systematically broken.
-It can say: "This approach no longer works."
-
-### STAGE 2 (Months 3.5-5): Object and State Formation
-**Technical Goals:**
-- Add object representation (hypotheses, not classes)
-- Add environment states (dangerous / safe / unknown)
-- Separate:
-  - "self"
-  - "world"
-
-**Expected Outcome:**
-Agent avoids repeated mistakes.
-Can formulate: "This object usually leads to bad outcomes."
-
-### STAGE 3 (Months 5-6.5): Multi-step Planning
-**Technical Goals:**
-- Implement shallow planning (2-3 steps ahead)
-- Action selection based on expected chain
-- Limit planning by time/resources
-
-**Expected Outcome:**
-Agent sometimes chooses actions that are disadvantageous now but beneficial later.
-Can explain: "I'm doing this so that later..."
-
-### STAGE 4 (Months 6.5-8.5): Transfer Learning to Another Game
-**Technical Goals:**
-- Connect second game
-- Implement adapter:
-  - New observation processing
-  - New action mapping
-- **DO NOT** change the cognitive core
-
-**Expected Outcome:**
-Second game:
-- First steps are chaotic
-- But stabilization is faster than in the first game
-- Measurable (number of steps to stability)
-
-**Primary success metric:** Not only stabilization speed, but also the speed of creating a working config-adapter for a new game (e.g., 2 days instead of 2 weeks for the first game).
-
-### STAGE 5 (Months 8.5-10.5): Self-generated Goals and Preferences
-**Technical Goals:**
-- Implement system of simple goals (not directly given)
-- Implement "I like this / don't like this" evaluation
-- Separate:
-  - Survival
-  - Exploration
-  - Optimization
-
-**Expected Outcome:**
-Agent repeats chosen playstyle.
-Its behavior is recognizable.
-
-### STAGE 6 (Months 10.5-12): Reflection and Self-correction
-**Technical Goals:**
-- Implement periodic reflection ("what I understood")
-- Implement revision of old hypotheses
-- Store:
-  - Successful strategies
-  - Failed strategies
-
-**Expected Outcome:**
-Agent says: "I used to think X, but now I believe Y."
-Behavior actually changes.
-
-### Key Success Metrics Across All Stages:
-1. **Architectural Purity:** No game logic in cognitive core
-2. **Transfer Learning:** Demonstrable knowledge transfer between games
-3. **Cognitive Development:** Observable progression in agent's reasoning
-4. **Configurability:** New game setup time decreasing with each iteration
-5. **Explainability:** Agent's ability to articulate its reasoning and learning
 
 ## 📄 License
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
