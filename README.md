@@ -152,10 +152,6 @@ graph TD
     Check -->|true| Introspection
     Introspection --> Action
     Check -->|false| END([END])
-
-    style CORE fill:#f5f5f5,stroke:#333,stroke-width:2px
-    style START fill:#e8f5e9,stroke:#2e7d32
-    style END fill:#ffebee,stroke:#c62828
 ```
 
 ## 📄 License
