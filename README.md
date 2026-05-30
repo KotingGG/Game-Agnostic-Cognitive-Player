@@ -65,7 +65,7 @@
 
 **Clone and set up the project:**
 ```bash
-git clone https://github.com/KotingGG/GameAgnosticCognitivePlayer.git
+git clone https://github.com/ResInferrer/GameAgnosticCognitivePlayer.git
 cd Game-Agnostic-Cognitive-Player
 ```
 
