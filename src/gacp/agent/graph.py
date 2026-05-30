@@ -11,60 +11,71 @@ from .state import AgentState
 
 
 class Graph:
-
     def build_workflow(self) -> CompiledStateGraph:
         workflow = StateGraph(AgentState)
 
+        # Adding all nodes
         workflow.add_node("perception", self._perception_node)
+        workflow.add_node("memory", self._memory_node)
         workflow.add_node("world_model", self._world_model_node)
         workflow.add_node("decision", self._decision_node)
         workflow.add_node("action", self._action_node)
-        workflow.add_node("memory", self._memory_node) 
+        workflow.add_node("introspection", self._introspection_node)
 
-        workflow.set_entry_point("perception")
-
+        # Linear chain (the loop will be handled in main.py)
         workflow.add_edge(START, "perception")
-        workflow.add_edge("perception", "world_model")
+        workflow.add_edge("perception", "memory")
+        workflow.add_edge("memory", "world_model")
         workflow.add_edge("world_model", "decision")
         workflow.add_edge("decision", "action")
-        workflow.add_edge("action", END)
 
+        # Conditional jump after action:
+        # - if reflection is needed -> introspection -> END
+        # - otherwise immediately END
         def should_reflect(state: AgentState):
-            # TODO: Implement this stub. Stub: Always return END, never reflect
+            if state.get("reflection_needed", False) or state.get("user_request") == "exit":
+                return "introspection"
             return END
 
         workflow.add_conditional_edges(
             "action",
             should_reflect,
-            {END: END} # TODO: Implement this stub. Stub. Change along with should_reflect
+            {
+                "introspection": "introspection",
+                END: END
+            }
         )
+        # Finish execution
+        workflow.add_edge("introspection", END)
 
+        # Compilation
         graph = workflow.compile()
 
-        # Visualization. 
-        # TODO: use langsmith
+        # Visualization
         mermaid_code = graph.get_graph().draw_mermaid()
         with open("architecture_graph.mmd", "w", encoding="utf-8") as f:
             f.write(mermaid_code)
 
         return graph
 
-    def _perception_node(self, state) -> AgentState: 
-        perception_instance = PerceptionModule()
-        return perception_instance.update_state(state)
+    # ---------------------------------------------
+    #                   Node Methods
+    # ---------------------------------------------
 
-    def _world_model_node(self, state) -> AgentState: 
-        world_model_instance = WorldModelModule()
-        return world_model_instance.update_state(state)
+    def _perception_node(self, state: AgentState) -> AgentState:
+        return PerceptionModule().update_state(state)
 
-    def _decision_node(self, state) -> AgentState: 
-        decision_instance = DecisionModule()
-        return decision_instance.update_state(state)
+    def _memory_node(self, state: AgentState) -> AgentState:
+        return MemoryModule().update_state(state)
 
-    def _action_node(self, state) -> AgentState: 
-        action_instance = ActionModule()
-        return action_instance.update_state(state)
+    def _world_model_node(self, state: AgentState) -> AgentState:
+        return WorldModelModule().update_state(state)
 
-    def _memory_node(self, state) -> AgentState: 
-        memory_instance = MemoryModule()
-        return memory_instance.update_state(state)
+    def _decision_node(self, state: AgentState) -> AgentState:
+        return DecisionModule().update_state(state)
+
+    def _action_node(self, state: AgentState) -> AgentState:
+        return ActionModule().update_state(state)
+
+    def _introspection_node(self, state: AgentState) -> AgentState:
+        return IntrospectionModule().update_state(state)

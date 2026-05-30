@@ -14,4 +14,6 @@ class AgentState(TypedDict):
     # Internal drivers and meta-information
     internal_drives: dict                                       # curiosity, survival
 
+    reflection_needed: bool                                     # Is there a user request for the text model
+    user_request: str                                           # User message that is sent to Introspection
     # ... others fields

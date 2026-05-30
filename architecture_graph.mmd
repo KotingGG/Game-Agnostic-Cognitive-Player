@@ -4,18 +4,22 @@ config:
     curve: linear
 ---
 graph TD;
-	__start__(<p>__start__</p>)
+	__start__([<p>__start__</p>]):::first
 	perception(perception)
+	memory(memory)
 	world_model(world_model)
 	decision(decision)
 	action(action)
-	memory(memory)
-	__end__(<p>__end__</p>)
+	introspection(introspection)
+	__end__([<p>__end__</p>]):::last
 	__start__ --> perception;
 	action -.-> __end__;
+	action -.-> introspection;
 	decision --> action;
-	perception --> world_model;
+	memory --> world_model;
+	perception --> memory;
 	world_model --> decision;
+	introspection --> __end__;
 	classDef default fill:#f2f0ff,line-height:1.2
 	classDef first fill-opacity:0
 	classDef last fill:#bfb6fc
