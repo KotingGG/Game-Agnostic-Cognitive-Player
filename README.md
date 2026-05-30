@@ -131,46 +131,31 @@ The architecture is a closed-loop cognitive system for an autonomous game agent,
 
 **Architecture Graph (detailed graph with breakdown of each step in every module -> [ARCHITECTURE.md](docs/ARCHITECTURE.md))
 ```mermaid
-graph TB
-    A["Game Environment<br/>"]
-    
-    subgraph "COGNITIVE CORE FLOW"
-        B["Perception Module"]
-        C["Memory System"]
-        D["World Model"]
-        E["Decision Module"]
-        F["Action Module"]
-        G["Introspection Module"]
-        
-        B -->|"observation JSON"| C
-        C -->|"context + history"| D
-        D -->|"predictions + explanations"| E
-        E -->|"action_abstract JSON"| F
-        
-        C -.->|"live memory stream"| G
-        
-        F -->|"feedback loop"| C
+graph TD
+    START([START]) --> Perception
 
-        F -->|"if reflection needed"| G
-        G -->|"after introspection"| C
+    subgraph CORE [COGNITIVE CORE]
+        Perception["Perception Module"]
+        Memory["Memory System"]
+        WorldModel["World Model"]
+        Decision["Decision Module"]
+        Action["Action Module"]
+        Introspection["Introspection Module"]
+
+        Perception --> Memory
+        Memory --> WorldModel
+        WorldModel --> Decision
+        Decision --> Action
     end
-    
-    A -->|"Raw data<br/>pixels / audio"| B
-    F -->|"keyboard / mouse<br/>signals"| A
-    
-    U["User / Operator"]:::user
-    H["TTS / Chat Interface"]:::utility
-    
-    U -->|"query/command"| G
-    G -->|"text response"| H
-    H --> U
 
-    class A external
-    class B,C,D,E,F,G coreModule
-    class U user
-    class H utility
+    Action --> Check{need reflection?}
+    Check -->|true| Introspection
+    Introspection --> Action
+    Check -->|false| END([END])
 
-    linkStyle 6 stroke:gray,stroke-width:1px,stroke-dasharray: 5 5
+    style CORE fill:#f5f5f5,stroke:#333,stroke-width:2px
+    style START fill:#e8f5e9,stroke:#2e7d32
+    style END fill:#ffebee,stroke:#c62828
 ```
 
 ## 📄 License
